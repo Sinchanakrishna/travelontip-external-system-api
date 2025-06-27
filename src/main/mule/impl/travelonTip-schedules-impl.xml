@@ -7,9 +7,11 @@ http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/
 http://www.mulesoft.org/schema/mule/db http://www.mulesoft.org/schema/mule/db/current/mule-db.xsd">
 	<sub-flow name="travelonTip-schedules-implSub_Flow" doc:id="f9fd5d07-097a-4690-a4e8-daa875c27df9" >
 		<logger level="INFO" doc:name="start-logger" doc:id="72b54eb5-495b-4fdd-9585-757a5ed96194" message="calling database for travelontip schedule info started"/>
-		<db:select doc:name="Select" doc:id="65228a15-a2d1-4922-989c-ec3f399f9b4f" config-ref="Database_Configs">
-			<db:sql ><![CDATA[select * from schedules where companyname = 'TravelOnTip';]]></db:sql>
+		<until-successful maxRetries="3" doc:name="Until Successful" doc:id="23ea6139-5348-414d-8bbf-144b5c4c2fc2" >
+			<db:select doc:name="Select" doc:id="65228a15-a2d1-4922-989c-ec3f399f9b4f" config-ref="Database_Configs">
+			<db:sql><![CDATA[select * from schedules where companyname = 'TravelOnTip';]]></db:sql>
 		</db:select>
+		</until-successful>
 		<ee:transform doc:name="Transform Message" doc:id="ecb60812-383e-4370-8ec7-1b3c00710d72" >
 			<ee:message >
 				<ee:set-payload ><![CDATA[%dw 2.0

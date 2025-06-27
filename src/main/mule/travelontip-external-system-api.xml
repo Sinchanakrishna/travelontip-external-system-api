@@ -19,9 +19,11 @@ http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/
 		<choice doc:name="Choice" doc:id="7dd7d7ed-abcb-4ad7-aea3-6a284dd5ca62" >
 			<when expression='#[vars.serviceType == "routes"]'>
 				<logger level="INFO" doc:name="Logger" doc:id="1b4e8ffc-8e20-4abf-aded-dc0f361df676" />
+				<flow-ref doc:name="travelonTip-routes-implSub_Flow" doc:id="eafc6038-2ea0-4a80-9ba0-f4198ae8ff5e" name="travelonTip-routes-implSub_Flow"/>
 			</when>
 			<when expression='#[vars.serviceType == "schedules"]'>
 				<logger level="INFO" doc:name="Logger" doc:id="1e22ada3-313a-4b89-9c29-ce925f6db6b1" />
+				<flow-ref doc:name="travelonTip-schedules-implSub_Flow" doc:id="0b9abc24-ae78-4463-b095-98a09ce6e22d" name="travelonTip-schedules-implSub_Flow"/>
 			</when>
 			<otherwise >
 				<logger level="INFO" doc:name="Logger" doc:id="599e314b-4914-41d1-af91-6e0d94070bf8" message="invalid serviceType"/>

@@ -1,15 +1,23 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<mule xmlns:db="http://www.mulesoft.org/schema/mule/db" xmlns="http://www.mulesoft.org/schema/mule/core"
-	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
-http://www.mulesoft.org/schema/mule/db http://www.mulesoft.org/schema/mule/db/current/mule-db.xsd">
-	<db:config name="Database_Config" doc:name="Database Config" doc:id="dea75567-00d3-4d8a-8cb8-25ba1b4f02d4" >
-		<db:my-sql-connection host="127.0.0.1" port="3306" user="root" password="Sinch@5500"/>
-	</db:config>
+<mule xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xmlns:db="http://www.mulesoft.org/schema/mule/db"
+	xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/db http://www.mulesoft.org/schema/mule/db/current/mule-db.xsd
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
 	<sub-flow name="travelonTip-routes-implSub_Flow" doc:id="034f336c-0a03-45d4-ba01-46bf0b950b1c" >
 		<logger level="INFO" doc:name="Logger" doc:id="f72b2eba-289c-48fd-9fc8-8f5898914f1b" message="travelOntip routes DB call started"/>
-		<db:select doc:name="Select" doc:id="168020df-8007-4a53-9a9a-cea4800d9477" config-ref="Database_Config"/>
+		<db:select doc:name="Select" doc:id="168020df-8007-4a53-9a9a-cea4800d9477" config-ref="Database_Configs">
+			<db:sql ><![CDATA[select * from routes where companycode = 'Travelontip';]]></db:sql>
+		</db:select>
 		<logger level="INFO" doc:name="Logger" doc:id="bda29100-7450-46dd-b2e4-6f31ca319292" message="DB response received for travelonTip"/>
+		<ee:transform doc:name="Transform Message" doc:id="1ea2eff3-96dc-4fe6-94ff-52ef2c513d7f" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+payload]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
 	</sub-flow>
 </mule>

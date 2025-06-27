@@ -1,5 +1,32 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<mule xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd"></mule>
+<mule xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xmlns:http="http://www.mulesoft.org/schema/mule/http"
+	xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+	<flow name="travelontip-external-system-apiFlow" doc:id="9f58200e-447a-4756-8cc0-da57cb3f74f9" >
+		<http:listener doc:name="Listener" doc:id="f7ffe2f5-f662-4006-abfe-d8f1c015c76c" config-ref="HTTP_Listener_configs" path="${http.basePath}"/>
+		<logger level="INFO" doc:name="Logger" doc:id="da4d71cb-f6bc-4f6b-a135-ac4c36aff702" message="request received from the travelontip system api"/>
+		<ee:transform doc:name="Transform Message" doc:id="2a1f3034-bcdb-4daa-a85a-d56500754444" >
+			<ee:message >
+			</ee:message>
+			<ee:variables >
+				<ee:set-variable variableName="serviceType" ><![CDATA[attributes.queryParams.serviceType]]></ee:set-variable>
+				<ee:set-variable variableName="transactionId" ><![CDATA[attributes.headers.transactionId]]></ee:set-variable>
+			</ee:variables>
+		</ee:transform>
+		<choice doc:name="Choice" doc:id="7dd7d7ed-abcb-4ad7-aea3-6a284dd5ca62" >
+			<when expression='#[vars.serviceType == "routes"]'>
+				<logger level="INFO" doc:name="Logger" doc:id="1b4e8ffc-8e20-4abf-aded-dc0f361df676" />
+			</when>
+			<when expression='#[vars.serviceType == "schedules"]'>
+				<logger level="INFO" doc:name="Logger" doc:id="1e22ada3-313a-4b89-9c29-ce925f6db6b1" />
+			</when>
+			<otherwise >
+				<logger level="INFO" doc:name="Logger" doc:id="599e314b-4914-41d1-af91-6e0d94070bf8" message="invalid serviceType"/>
+			</otherwise>
+		</choice>
+		<logger level="INFO" doc:name="Logger" doc:id="71c8ba5b-6d84-415b-8599-f4e053a2dd94" message="response send back to the travelontip system api"/>
+	</flow>
+</mule>
